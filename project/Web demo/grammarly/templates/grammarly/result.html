@@ -1,0 +1,49 @@
+{% extends "grammarly/base.html" %}
+{% block content %}
+<div class="image-container result-image"></div>
+
+{% if numberOfIssues > 0 %}
+<span class="badge badge-pill badge-primary left p-1 pl-3">
+    مورد یافت شد <span class="badge badge-pill badge-light medium">{{numberOfIssues}}</span>
+</span>
+{% elif numberOfIssues == 0 %}
+<span class="badge badge-pill badge-success left p-1 pl-3">
+    موردی یافت نشد
+    <span class="badge badge-pill badge-light p-2"><i class="fa fa-check medium"></i></span>
+
+</span>
+{% endif %}
+<div class="row">
+    <div class="col-8">
+        <p class="mt-2">
+            {% for d in data%}
+            {% if d.formattedPhrase|length > 0 %}
+            <span class="highlight{{d.typeCode}}" class="btn btn-secondary" data-toggle="tooltip"
+                data-placement="bottom" title="{{d.message}}+'\n'+{{d.equivalent}}">{{ d.phrase }}</span>
+            {% else %}
+            <span class="highlight{{d.typeCode}}" class="btn btn-secondary" data-toggle="tooltip"
+                data-placement="bottom" title="{{d.equivalent}}">{{ d.phrase }}</span>
+            {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+    <div class="col-4">
+        {% for d in data%}
+        {% if d.formattedPhrase|length > 0 %}
+        <div class="toast color{{d.typeCode}}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <small class="mr-auto">{{d.typeName}}</small>
+                <!-- <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <small class="toast-body">
+                {{d.message}}
+            </small>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

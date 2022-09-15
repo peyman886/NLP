@@ -1,0 +1,45 @@
+{% extends "grammarly/resultbase.html" %}
+{% block content %}
+<div class="image-container result-image"></div>
+
+{% if numberOfIssues > 0 %}
+<span class="badge badge-pill badge-primary left p-1 pl-3">
+    مورد یافت شد <span class="badge badge-pill badge-light medium">{{numberOfIssues}}</span>
+</span>
+{% elif numberOfIssues == 0 %}
+<span class="badge badge-pill badge-success success left p-1 pl-3">
+    موردی یافت نشد
+    <span class="badge badge-pill badge-light p-2"><i class="fa fa-check medium"></i></span>
+</span>
+{% endif %}
+<div class="row mt-3">
+    <div class="col-8">
+        <p class="mt-2">
+            {% for d in data%}
+            {% if d.formattedPhrase|length > 0 %}
+            <span class="highlight{{d.typeCode}}" class="btn btn-secondary" data-toggle="tooltip"
+                data-placement="bottom" title="شکل صحیح : {{d.formattedPhrase}}">{{ d.phrase }}</span>
+            {% else %}
+            {{ d.phrase }}
+            {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+    <div class="col-4">
+        {% for d in data%}
+        {% if d.formattedPhrase|length > 0 %}
+        <div class="toast color{{d.typeCode}}" role="alert" aria-live="assertive" aria-atomic="true">
+            <p class="toast-body">
+                {{d.message}}
+            </p>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <form action="/" method="post" class="center">
+        {% csrf_token %}
+        <button type="submit" class="btn submit-btn" style="margin-top: 100px;"> بازگشت به منو اصلی</button>
+    </form>
+</div>
+
+{% endblock %}

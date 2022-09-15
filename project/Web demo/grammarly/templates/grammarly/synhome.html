@@ -1,0 +1,19 @@
+{% extends "grammarly/base.html" %}
+{% load static %}
+{% block content %}
+<div class="image-container"></div>
+<form action="get_synonym/" method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="form-group ">
+        <div class="input-container">
+            <input class="form-control" id="your_text" name="your_text" placeholder="متن مورد نظر خود را وارد کنید"
+                autofocus required></input>
+            <span id="suggestion"></span>
+        </div>
+        <input class="form-control mt-4" id="your_word" name="your_word" required
+            placeholder="کلمه مورد نظر خود را وارد کنید"></input>
+    </div>
+    <button id="to-hide" type="submit" class="btn submit-btn mt-2">بررسی</button>
+</form>
+
+{% endblock %}

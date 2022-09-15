@@ -1,0 +1,29 @@
+{% extends "grammarly/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h1>خوش آمدید!</h1>
+    <p class="desc">لطفا منو مورد نظر خود را انتخاب کنید.</p>
+    <div class="row">
+        <div class="col-sm">
+            <div class="image-container2 syn-image"></div>
+            <a href="syn_home/">پیشنهاد کلمات معادل</a>
+            <p class="desc">در این بخش می توانید با وارد کردن جمله مورد نظر و کلمه ای که به دنبال معنای آن هستید، معادل
+                های معنایی آن را به دست آورید.</p>
+        </div>
+        <div class="col-sm">
+            <div class="image-container2 svm-image"></div>
+            <a href="svm_home/">تطابق شناسه با فعل</a>
+            <p class="desc">در این بخش میتوانید جمله خود را از نظر تطابق فعل با شناسه بررسی کرده و در صورت عدم تطابق فعل
+                جایگزین پیشنهادی مناسب را دریافت کنید</p>
+        </div>
+        <div class="col-sm">
+            <div class="image-container2 grammar-image"></div>
+            <a href="grammar_home/">اصلاحات املایی و گرامری</a>
+            <p class="desc">در این بخش می توانید جمله خود را از نظر املایی و گرامری مورد تحلیل و بررسی قرار داده و
+                پیشنهادات اصلاحی دریافت کنید.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

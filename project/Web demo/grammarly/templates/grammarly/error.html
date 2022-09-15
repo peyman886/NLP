@@ -1,0 +1,15 @@
+{% extends "grammarly/base.html" %}
+{% block content %}
+<div class="image-container error-image"></div>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>خطا</strong> <br> {{ error }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<p class="error-message">تنها کاراکترهای فارسی مجاز می باشد</p>
+<form action="/" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn submit-btn mt-5">بازگشت</button>
+</form>
+{% endblock %}

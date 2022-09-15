@@ -1,0 +1,16 @@
+{% extends "grammarly/base.html" %}
+{% block content %}
+<div class="image-container result-image"></div>
+<h1>{{ word }}</h1>
+<ul>
+    {% for d in data%}
+    <li style="width: fit-content; direction: rtl;">{{ d }}</li>
+    {% endfor %}
+</ul>
+
+<form action="/" method="post" class="center">
+    {% csrf_token %}
+    <button type="submit" class="btn submit-btn" style="margin-top: 100px;"> بازگشت به منو اصلی</button>
+</form>
+
+{% endblock %}
