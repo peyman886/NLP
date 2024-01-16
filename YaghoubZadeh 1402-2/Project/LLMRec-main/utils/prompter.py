@@ -54,11 +54,7 @@ class Prompter(object):
 
         Returns:
         str: The generated prompt.
-        '''
-        
-
-        
-        # returns the full prompt from instruction and optional input
+        '''      
         
         # if a label (=response, =output) is provided, it's also appended.
         if input:
@@ -80,4 +76,13 @@ class Prompter(object):
         return res
 
     def get_response(self, output: str) -> str:
+        """
+        Extract the response part from the model's output.
+
+        Parameters:
+        - output (str): The complete output text from the model.
+
+        Returns:
+        str: The extracted response portion of the output.
+        """
         return output.split(self.template["response_split"])[1].strip()
