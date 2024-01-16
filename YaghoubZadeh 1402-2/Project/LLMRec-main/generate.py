@@ -1,40 +1,56 @@
 import sys
 
-import fire
-import gradio as gr
+import fire # Command line interface library
+import gradio as gr # Library for building ML-powered web UIs
 import torch
 import transformers
-from peft import PeftModel
+from peft import PeftModel # A model wrapper for performance improvements
 from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
 
-from utils.prompter import Prompter
+from utils.prompter import Prompter # Custom class for managing prompt templates
 
+# Set the device to GPU (cuda) if available, otherwise use CPU
 if torch.cuda.is_available():
     device = "cuda"
 else:
     device = "cpu"
 
+# Check for Apple's MPS availability (specific to Apple hardware)
 try:
     if torch.backends.mps.is_available():
         device = "mps"
 except:  # noqa: E722
     pass
 
-
 def main(
-    load_8bit: bool = False,
-    base_model: str = "",
-    lora_weights: str = "tloen/alpaca-lora-7b",
-    prompt_template: str = "med_template",  # The prompt template to use, will default to alpaca.
-    server_name: str = "0.0.0.0",  # Allows to listen on all interfaces by providing '0.0.0.0'
-    share_gradio: bool = True,
-):
+    load_8bit: bool = False, base_model: str = "", lora_weights: str = "tloen/alpaca-lora-7b",
+    prompt_template: str = "med_template", server_name: str = "0.0.0.0", share_gradio: bool = True,):
+    """
+    Main function to set up and run the language model for generating outputs based on prompts.
+
+    Parameters:
+    - load_8bit (bool): Whether to load the model in 8-bit precision for better performance.
+    - base_model (str): The base model for language generation to be used.
+    - lora_weights (str): Path or identifier for LoRA weights for the model.
+    - prompt_template (str): Name of the prompt template to use.
+    - server_name (str): Server name for hosting the Gradio interface.
+    - share_gradio (bool): Flag to determine if the Gradio app should be shared publicly.
+
+    Returns:
+    None
+    """
+    #  Ensure that a base model is specified
     assert (
         base_model
     ), "Please specify a --base_model, e.g. --base_model='decapoda-research/llama-7b-hf'"
 
+    # Initialize the prompter with the specified template
     prompter = Prompter(prompt_template)
+    
+    # Load the tokenizer for the specified base model
     tokenizer = LlamaTokenizer.from_pretrained(base_model)
+    
+    # Load the model based on the device and settings
     if device == "cuda":
         model = LlamaForCausalLM.from_pretrained(
             base_model,
@@ -47,6 +63,8 @@ def main(
             lora_weights,
             torch_dtype=torch.float16,
         )
+    
+    # Additional settings for Apple's MPS
     elif device == "mps":
         model = LlamaForCausalLM.from_pretrained(
             base_model,
@@ -60,6 +78,7 @@ def main(
             torch_dtype=torch.float16,
         )
     else:
+        # Settings for CPU usage        
         model = LlamaForCausalLM.from_pretrained(
             base_model, device_map={"": device}, low_cpu_mem_usage=True
         )
@@ -69,6 +88,8 @@ def main(
             device_map={"": device},
         )
 
+    # Code for Gradio interface setup and model interaction would go here
+    
     # unwind broken decapoda-research config
     model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
     model.config.bos_token_id = 1
